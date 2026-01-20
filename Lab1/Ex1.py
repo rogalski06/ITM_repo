@@ -1,2 +1,2 @@
-print("Hello, my name is Katherine!")
-print("Have a great Thursday.")
+print("Hello, my name is Katherine.")
+print("Have a great Thursday!")
