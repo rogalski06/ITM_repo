@@ -9,3 +9,8 @@ celsius_value_rounded = round(celsius_value, 1)
 
 print(f"You entered: {fehrenheit_value} °F")
 print(f"Temperature in Celsius: {celsius_value_rounded} °C")
+
+def fahrenheit_to_celsius(fehrenheit):
+    """Convert fehrenheit to celsius."""
+    celsius = (fehrenheit - 32) * 5 / 9
+    return round(celsius, 1)
