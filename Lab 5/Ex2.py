@@ -11,3 +11,11 @@ print(taxi_trips)
 print(f"The third trip was {taxi_trips['miles'][2]} miles long.")
 print(f"The fare for the third trip was ${taxi_trips['fares'][2]:.2f}.")
 
+trips = dict(zip(trip_durations, trip_fares))
+print(trips)
+
+trip_num = input("What trip do you want? [1-4]: ")
+trip_index = int(trip_num) - 1
+print(f"Duration: {list(trips.keys())[trip_index]} miles")
+print(f"Fare: ${list(trips.values())[trip_index]:.2f}")
+
