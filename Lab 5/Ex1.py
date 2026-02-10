@@ -6,4 +6,3 @@ taxi_trip_info = {
 
 print(taxi_trip_info)
 print(taxi_trip_info["trip_miles"])
-
