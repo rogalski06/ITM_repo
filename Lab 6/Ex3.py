@@ -15,3 +15,23 @@ def determine_progress1(hits, spins):
         progress = "Get going!"
 
     return progress
+
+def test_determine_progress1(progress_function):
+
+# Test case 1: spins = 0 returns “Get going!”
+    assert progress_function(10,0) == "Get going!", "Test case 1 failed"
+# Test case 2: hits/spins = 0 returns “Get going!”
+    assert progress_function(0,10) == "Get going!", "Test case 2 failed"
+# Test case 3: hits/spins = 0.1 (0 < returns < 0.25) returns “On your way!”
+    assert progress_function(1,10) == "On your way!", "Test case 3 failed"
+# Test case 4: hits/spins = 0.25 (ratio >= 0.25) returns “Almost there!”
+    assert progress_function(1,4) == "Almost there!", "Test case 4 failed"
+# Test case 5: hits/spins >= 0.5 with hits < spins returns “You win!”
+    assert progress_function(6,10) == "You win!", "Test case 5 failed"
+# Test case 6: hits/spins = 0.5 with hits >= spins returns “Almost there!”
+    assert progress_function(11,10) == "Almost there!", "Test case 6 failed"
+
+    print("All tests passed!")
+
+# Run the test
+test_determine_progress1(determine_progress1)
