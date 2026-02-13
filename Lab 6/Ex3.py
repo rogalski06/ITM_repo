@@ -100,3 +100,7 @@ test_determine_progress2(determine_progress2)
 
 # Run the test for determine_progress3
 test_determine_progress3(determine_progress3)
+
+# Give an example variation of determine_progress1 that can be used to implement the logic for the function that does not use if-statements and explain its advantages and disadvantages. 
+# Hint: Create a list of progress messages. Make an expression that computes the appropriate index based on the conditionals used in the if-statements from the previous function
+    # Hint: Make a list with indexes that will be the conditions (1 = True, 0 = False)
