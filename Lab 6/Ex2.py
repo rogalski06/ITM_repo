@@ -8,3 +8,19 @@ elif len(list) >= 5 and len(list) <= 10:
     print("The list contains between 5 and 10 elements.")
 else:
     print("The list contains more than 10 elements.")
+
+# Create a list of lists with test cases for each possible condition.
+
+test_cases = [
+    [1, 2, 3], # < 5
+    [1, 2, 3, 4, 5, 6], # 5–10
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] # > 10
+]
+
+for test in test_cases:
+    if len(test) < 5:
+        print("The list contains less than 5 elements.")
+    elif len(test) >= 5 and len(test) <= 10:
+        print("The list contains between 5 and 10 elements.")
+    else:
+        print("The list contains more than 10 elements.")
