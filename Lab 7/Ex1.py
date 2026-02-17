@@ -16,3 +16,8 @@ for num in range (0,25):
 #1c
 for num in range(1, 51, 2):
     print(num)
+
+#1d
+nums = [2*num + 1 for num in range(0, 51) if 2*num + 1 < 50]
+
+print(nums)
