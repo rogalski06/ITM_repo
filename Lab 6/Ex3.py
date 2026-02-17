@@ -104,3 +104,16 @@ test_determine_progress3(determine_progress3)
 # Give an example variation of determine_progress1 that can be used to implement the logic for the function that does not use if-statements and explain its advantages and disadvantages. 
 # Hint: Create a list of progress messages. Make an expression that computes the appropriate index based on the conditionals used in the if-statements from the previous function
     # Hint: Make a list with indexes that will be the conditions (1 = True, 0 = False)
+
+def determine_progress_no_if(hits, spins):
+    progress_messages = [
+        "Get going!",        # 0: spins == 0 or ratio == 0
+        "On your way!",      # 1: 0 < ratio < 0.25
+        "Almost there!",     # 2: 0.25 <= ratio < 0.5 or ratio >= 0.5 and hits >= spins
+        "You win!"           # 3: ratio >= 0.5 and hits < spins
+    ]
+    ratio = (hits / spins) if spins else 0
+    index = (spins > 0) * (ratio > 0) \
+          + (ratio >= 0.25) \
+          + ((ratio >= 0.5) and (hits < spins))
+    return progress_messages[index]
