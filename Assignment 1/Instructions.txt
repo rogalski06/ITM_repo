@@ -1,0 +1,13 @@
+Build an interactive quiz application that supports asking a user at least five multiple-choice questions.
+
+The quiz should present each question to the user, present at least four options for the answer (a-d), accept an answer from the user (e.g. "b") and let them know if their answer is correct or not.  
+
+At the end of the quiz, it should report the final score.  
+
+The program should not allow a user to enter an invalid response (e.g. if the responses are a-d, any other response, such as "q", should be ignored and the user should be re-prompted).  
+
+The quiz questions should be kept in a file so that it is easy to add/remove questions or to have sets of questions on different topics
+
+Additional Requirements
+    1. Write the history of scores out to a file.
+    9. Add a timer for each question and give bonus points for the fastest correct quiz answers or total quiz time.
