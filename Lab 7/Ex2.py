@@ -17,3 +17,11 @@ while (evens[-1] < 50):
     num += 0
 
 print(evens)
+
+#c
+evens = []
+
+for num in range(2, 52, 2):
+    evens.append(num)
+
+print(evens)
