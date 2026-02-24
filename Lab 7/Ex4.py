@@ -11,5 +11,16 @@ for purchase in recent_purchase:
         print("This purchase is within budget: ", purchase) 
 
 
-#on your own started
-#def check_budget(purchase, limit):
+# Create a function for this and write test cases for this and use them to test the function.
+
+def check_budget(purchase, limit):
+    if purchase > limit:
+        return "over budget"
+    else:
+        return "within budget"
+
+# Test cases
+print(check_budget(36.13, 150))  # within budget
+print(check_budget(183.35, 150))  # over budget
+print(check_budget(0, 150))  # within budget
+print(check_budget(150, 150))  # within budget
