@@ -9,10 +9,9 @@
     # 9. Add a timer for each question and give bonus points for the fastest correct quiz answers or total quiz time.
 
 # Import relevant libraries
-import time
-import json
 import random
 from string import ascii_lowercase
+import json
 
 # Load questions from a JSON file and format as a dictionary where the key is the question and the value is a list of options.
 def load_questions(filename):
@@ -38,7 +37,7 @@ def shuffle_options(options):
     return shuffled_options
 
 #  Create a dictionary of labeled answer alternatives (e.g. "a", "b", "c", "d") for the options.
-def create_labeled_alternatives(options):
+def alt_labels(options):
     return dict(zip(ascii_lowercase, options))
 
 # Display the question and its answer options to the user.
@@ -49,7 +48,7 @@ def display_question(question_num, question, labeled_alternatives):
         print(f" {label}. {alternative}")
 
 # Have users answer the questions
-def user_answer(labeled_alternatives):
+def get_user_answer(labeled_alternatives):
     while True:
         answer_label = input("Your answer: ").strip().lower()
         if answer_label in labeled_alternatives:
@@ -74,10 +73,10 @@ def run_quiz(questions):
     for num, (question, options) in enumerate(question_list, start=1):
         correct_answer = options[0]
         shuffled_options = shuffle_options(options)
-        labeled_alternatives = create_labeled_alternatives(shuffled_options)
+        labeled_alternatives = alt_labels(shuffled_options)
         
         display_question(num, question, labeled_alternatives)
-        user_answer = user_answer(labeled_alternatives)
+        user_answer = get_user_answer(labeled_alternatives)
         
         if check_answer(user_answer, correct_answer):
             num_correct += 1
@@ -87,7 +86,8 @@ def run_quiz(questions):
 
 def main():
     num_correct = run_quiz(questions)
-    print(f"You got {num_correct} out of {len(shuffle_questions)} correct.")
+    print(f"You got {num_correct} out of {len(questions)} correct.")
 
 if __name__ == "__main__":
-    main()
+    score = run_quiz(questions)
+    print(f"Your final score is {score} out of {len(questions)}.")
