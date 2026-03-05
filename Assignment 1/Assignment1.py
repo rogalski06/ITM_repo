@@ -31,6 +31,7 @@ def shuffle_questions(questions):
     random.shuffle(shuffled_questions)
     return dict(shuffled_questions)
 
+#Shuffle the options within each question to ensure a different quiz experience each time.
 def shuffle_options(options):
     shuffled_options = options.copy()
     random.shuffle(shuffled_options)
@@ -84,10 +85,12 @@ def run_quiz(questions):
     
     return num_correct
 
+# Main function to run the quiz and report the final score.
 def main():
     num_correct = run_quiz(questions)
     print(f"You got {num_correct} out of {len(questions)} correct.")
 
+# Run the main function when the script is executed.
 if __name__ == "__main__":
     score = run_quiz(questions)
     print(f"Your final score is {score} out of {len(questions)}.")
