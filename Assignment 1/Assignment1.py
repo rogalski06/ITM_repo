@@ -12,6 +12,7 @@
 import random
 from string import ascii_lowercase
 import json
+from threading import Timer
 
 # Load questions from a JSON file and format as a dictionary where the key is the question and the value is a list of options.
 def load_questions(filename):
@@ -41,6 +42,12 @@ def shuffle_options(options):
 def alt_labels(options):
     return dict(zip(ascii_lowercase, options))
 
+# Make a timer function that will be used to give bonus points for the fastest correct quiz answers or total quiz time.
+def start_timer():
+    timer = Timer(30.0, lambda: print("Time's up!"))
+    timer.start()
+    return timer
+
 # Display the question and its answer options to the user.
 def display_question(question_num, question, labeled_alternatives):
     print(f"Question {question_num}:")
@@ -65,7 +72,7 @@ def check_answer(user_answer, correct_answer):
         print(f"The answer is '{correct_answer}' not '{user_answer}'.")
         return False
 
-# Run the quiz by loading the questions, shuffling them, and iterating through each question to display it, get the user's answer, check it, and keep track of the score. At the end, report the final score.
+# Run the quiz by loading the questions, shuffling them, and iterating through each question to display it, get the user's answer within 10 second timer, check it, and keep track of the score. At the end, report the final score.
 def run_quiz(questions):
     shuffled_questions = shuffle_questions(questions)
     question_list = list(shuffled_questions.items())
