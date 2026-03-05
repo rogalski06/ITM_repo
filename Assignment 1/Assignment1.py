@@ -24,6 +24,8 @@ def load_questions(filename):
         questions_dict[item['question']] = item['options']
     return questions_dict
 
+questions = load_questions('questions.json')
+
 # Shuffle the questions and options to ensure a different quiz experience each time.
 def shuffle_questions(questions):
     shuffled_questions = list(questions.items())
@@ -64,8 +66,8 @@ def check_answer(user_answer, correct_answer):
         return False
 
 # Run the quiz by loading the questions, shuffling them, and iterating through each question to display it, get the user's answer, check it, and keep track of the score. At the end, report the final score.
-def run_quiz():
-    shuffled_questions = shuffle_questions(question)
+def run_quiz(questions):
+    shuffled_questions = shuffle_questions(questions)
     question_list = list(shuffled_questions.items())
     
     num_correct = 0
@@ -82,3 +84,10 @@ def run_quiz():
         print()
     
     return num_correct
+
+def main():
+    num_correct = run_quiz(questions)
+    print(f"You got {num_correct} out of {len(shuffle_questions)} correct.")
+
+if __name__ == "__main__":
+    main()
