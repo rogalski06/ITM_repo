@@ -14,6 +14,7 @@ from string import ascii_lowercase
 import json
 import time
 from threading import Timer, Thread
+from datetime import datetime
 
 # Load questions from a JSON file and format as a dictionary where the key is the question and the value is a list of options.
 def load_questions(filename):
@@ -107,6 +108,14 @@ def calculate_bonus_points(time_taken):
     else:
         return 0  # No bonus points
 
+# Save quiz results to a history file for later review.
+def save_score(num_correct, total_bonus, total_questions, filename="score_history.txt"):
+    """Append a line with the current timestamp and score details to a file."""
+    from datetime import datetime
+    timestamp = datetime.now().isoformat(sep=' ', timespec='seconds')
+    with open(filename, 'a') as f:
+        f.write(f"{timestamp} - {num_correct}/{total_questions} correct, bonus {total_bonus}\n")
+
 # Run the quiz by loading the questions, shuffling them, and iterating through each question to display it, get the user's answer within 10 second timer, check it, and keep track of the score. At the end, report the final score.
 def run_quiz(questions):
     shuffled_questions = shuffle_questions(questions)
@@ -141,9 +150,13 @@ def main():
     num_correct, total_bonus_points = run_quiz(questions)
     print(f"You got {num_correct} out of {len(questions)} correct.")
     print(f"Bonus points earned: {total_bonus_points}")
+    # Record the result in history
+    save_score(num_correct, total_bonus_points, len(questions))
 
 # Run the main function when the script is executed.
 if __name__ == "__main__":
     num_correct, total_bonus_points = run_quiz(questions)
     print(f"Your final score is {num_correct} out of {len(questions)}.")
     print(f"Bonus points earned: {total_bonus_points}")
+    # store history on direct execution as well
+    save_score(num_correct, total_bonus_points, len(questions))
