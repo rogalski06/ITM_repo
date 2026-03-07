@@ -16,6 +16,8 @@ import time
 from threading import Timer, Thread
 from datetime import datetime
 
+# Define functions we will need to use when running the quiz.
+
 # Load questions from a JSON file and format as a dictionary where the key is the question and the value is a list of options.
 def load_questions(filename):
     with open(filename, 'r') as file:

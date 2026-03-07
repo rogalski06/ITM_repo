@@ -1,16 +1,24 @@
 {
   "questions": [
     {
-      "question": "What is the airspeed of an unladen swallow in miles/hour?",
-      "options": ["12", "10", "15", "8"]
+      "question": "What is Lightning McQueen's racing number?",
+      "options": ["95", "67", "21", "77"]
     },
     {
-      "question": "What is the capital of Texas?",
-      "options": ["Austin", "Houston", "Dallas", "San Antonio"]
+      "question": "What is the name of the town where Lightning McQueen gets stranded?",
+      "options": ["Radiator Springs", "Los Angeles", "New York", "San Francisco"]
     },
     {
-      "question": "The last supper was painted by which artist?",
-      "options": ["Da Vinci", "Raphael", "Michelangelo", "Caravaggio"]
+      "question": "What is Lightning McQueen's catchphrase?",
+      "options": ["Ka-Chow!", "You're On!", "Ka-Chigga!", "I am speed!"]
+    },
+    {
+      "question": "Who is Lightning McQueen's best friend in Radiator Springs?",
+      "options": ["Mater", "Sally", "Doc Hudson", "Luigi"]
+    },
+    {
+      "question": "What is the name of the racing cup?",
+      "options": ["Piston Cup", "Turbo Cup", "Engine Cup", "Racer Cup"]
     }
   ]
 }
