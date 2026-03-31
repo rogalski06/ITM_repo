@@ -14,9 +14,15 @@ df['order_date'] = pd.to_datetime(df['order_date'], errors='coerce')
 
 # Coerce quantity and unit_price to numeric, setting errors to NaN
 df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
+df['unit_price'] = pd.to_numeric(df['unit_price'], errors='coerce')
 df['sales'] = df['quantity'] * df['unit_price']
 
-pivot_table = df.pivot_table(values='sales', index='region', columns='order_type', aggfunc='sum')
-print(pivot_table)
+pivot_table = df.pivot_table(df,
+                             index='sales_region',
+                             columns='order_type',
+                             aggfunc=np.sum,
+                             margins=True,
+                             margins_name='Total Sales')
+
 
 print(df.head(5))
