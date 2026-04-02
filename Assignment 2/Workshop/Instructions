@@ -1,0 +1,65 @@
+Assignment 2 Workshop
+
+Read the description of the sales analytics dashboard application. Then, build the dashboard incrementally as follows. Test thoroughly each step:
+
+Write a program that loads the CSV file at https://drive.google.com/file/d/1Fv_vhoN4sTrUaozFPfzr0NCyHJLIeXEA/view?usp=sharing
+and writes out a local “sales_data_test.csv” file from the first 10 rows of this data.  Use this file as you develop the dashboard for faster testing. Note: you can use exercise #1 from the Pivot Tables Lab for this
+
+Write a function load_csv() that loads a CSV file into a dataframe. It should indicate the file is being loaded and when it is successfully loaded and the time it took to load. Print the number of rows and list the columns of the dataframe. Use the pyarrow backend and skip bad rows. Convert dates into a more useful format. Write code to handle if the file was not loaded successfully or had trouble parsing the CSV data. After loading the data, check that the dataframe has all the necessary columns used in the dashboard (for example, there must be quantity and unit_price columns as these are used to compute sale amounts in creating the sales by region table). If not, display a warning message indicating what fields are missing and that some analytics will not function without them. Test this function by loading the sales_data_test.csv file and the sales data CSV file on Google Drive.
+
+Extend (2) by creating a function display_initial_rows(data) that:
+Prompts the user to specify how many initial rows of the DataFrame they would like to see.
+Accepts specific inputs:
+A number to display that many rows.
+The word "all" to display all rows.
+An empty input to skip the preview.
+Validates user input and handles invalid entries gracefully.
+Create a main()function that infinitely loops on display_initial_rows()then checks the condition __name__ == "__main__"  to see if the script is being run directly. If true, it calls the main() function, starting your main loop for the application.
+
+Extend (3) to allow users to interactively explore and analyze sales data from a CSV file by providing a simple command-line interface for user interaction. 
+Implement a function exit_program(data) that cleanly exits the program when called. 
+Implement a function sales_by_region_order_type(data) creates a pivot table showing the number of unique employees in each sales region and displays the pivot table. Note: you can use exercise #2 from the Pivot Tables Lab for this
+Design an interactive menu using a display_menu() function that:
+Lists available actions for the user, including displaying initial rows, showing employees by region, and exiting the program. Use a tuple of menu items and corresponding functions for this:
+menu_options = (
+   ("Show the first n rows of sales data", display_initial_rows),
+   ("Show the number of employees by region", show_employees_by_region),
+   ("Exit the program", exit_program)
+)
+Allows users to select options by entering the corresponding number from the index in menu_options and returns the users input.
+Put display_menu()in the main loop.  Continuously displays the menu and processes user selections until the user chooses to exit. Check that the selection is valid. If not, ask the user to input again. For a valid input, call the corresponding function for the menu_option choice.
+Implement R4. Create custom pivot table. 
+Implement a generate_custom_pivot_table() function that gives users maximum flexibility in creating their own pivot tables from the sales data. It guides the user through a step-by-step process to select which data dimensions (rows, columns, values, and aggregation functions) to include in their pivot table. This function offers a dynamic and customizable way to analyze the data.  
+
+The step-by-step process The menu allows users to specify rows, columns, values, and the aggregation function for generating a custom pivot table. This gives users flexibility to explore data in a more granular way. 
+
+Start by adding by creating a simple generate_custom_pivot_table(data)that just outputs the message “custom table” and add it to the menu_options tuple.  Next define the options for row, column, value, and aggregation function selections.
+
+Row Selection: This is required. Any columns in the dataframe (e.g., sales_region, product_category, etc.). Use row_options = list(data.columns) 
+Column Selection: The user can optionally choose column dimensions (e.g., customer_type, order_type) but these cannot be the same as any of the row selections. Start by defining the col_options as row_options. Redefine this after the user selects the rows. If rows are a list of columns selected by the user, use col_options = [col for col in col_options if col not in rows] to remove the selected rows from column options. 
+Value Selection: The user selects the numeric field to aggregate (e.g., sales, quantity, unit_price). Use value_options = list(data.select_dtypes(include=['number']).columns) 
+Aggregation Function: The user selects the aggregation function (e.g., sum, mean, count). There are only a fixed set of functions that can be used agg_options = ['sum', 'mean', 'count']
+
+	Next add the following function
+def get_user_selection(options, prompt): 
+print(prompt) for i, option in enumerate(options):
+print(f"{i+1}. {option}") 
+choice = input("Enter the number(s) of your choice(s), separated by commas: ") 
+selected = [options[int(i) - 1] for i in choice.split(',')] if choice else []
+return selected
+
+Now use the above function in generate_custom_pivot_table()to get the options from the user. For example:
+	    rows = get_user_selection(row_options, "Select rows:")
+
+After the user selects the options, generate and display the pivot table. 
+
+    pivot_table = pd.pivot_table(
+        data, 
+        index=rows, 
+        columns=cols if cols else None, 
+        values=values, 
+        aggfunc=agg_func
+    )
+
+Create functions for all pre-defined analytics specified in R3 (note that you already implemented in the above analytics 1 and 2). Add these to the menu options.
+
