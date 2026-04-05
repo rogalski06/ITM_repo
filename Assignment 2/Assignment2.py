@@ -96,10 +96,10 @@ def total_sales_by_region_and_product(dataframe):
     print(pivot_table)
     return
 
-# 6. Function to show total sales quantity and price by customer type
-def total_sales_by_customer_type(dataframe):
-    pivot_table = pd.pivot_table(dataframe, values=['quantity', 'unit_price'], index='customer_type', aggfunc='sum', fill_value=0)
-    print("\nTotal sales by customer type:")
+# 6. Function to show total sales quantity and price by customer and order type
+def total_sales_by_customer_and_order_type(dataframe):
+    pivot_table = pd.pivot_table(dataframe, values=['quantity', 'unit_price'], index=['customer_type', 'order_type'], aggfunc='sum', fill_value=0)
+    print("\nTotal sales by customer type and order type:")
     print(pivot_table)
     return
 
@@ -173,7 +173,7 @@ def display_menu(dataframe):
         ("Show average sales by region with average sales by state and sale type", average_sales_by_region_state_ordertype),
         ("Show sales by customer type and order type by state", sales_by_customer_type_and_order_type_by_state),
         ("Show total sales quantity and price by region and product", total_sales_by_region_and_product),
-        ("Show total sales quantity and price by customer type", total_sales_by_customer_type),
+        ("Show total sales quantity and price by customer type and order type", total_sales_by_customer_and_order_type),
         ("Show max and min sales price of sales by category", max_min_sales_price_by_category),
         ("Show the number of employees by region", show_employees_by_region),
         ("Create a custom pivot table", custom_pivot_table),
