@@ -2,11 +2,16 @@
 # The dashboard will allow users to explore and analyze sales data in various dimensions (e.g., by region, employee, product, and customer)
 # The dashboard provides both predefined analytical tasks and custom pivot table exploration to analyze sales data.
 
+# Individual Requirements:
+# 1. For each result, ask the user if they want the results exported to an Excel file (that can be read directly into Excel). Ask the user what filename they want.
+# 9. Instead of replacing missing data in the pivot table with zeroes, replace it with the mean value for that column. 
+
 # Import necessary libraries
 import time
 import pandas as pd
 import numpy as np
 import pyarrow
+import openpyxl
 
 pd.set_option('display.max_columns', None)  # Show all columns
 pd.set_option('display.max_rows', None)  # Show all rows
@@ -26,7 +31,7 @@ def load_csv(filepath):
         print(f"number of rows: {len(df)}") # Counting rows
         print(f"Columns: {df.columns.tolist()}") # Listing columns
 
-        df.fillna(0, inplace=True)  # Replace missing data with zeros instead of NaT
+        df.fillna(df.mean(numeric_only=True), inplace=True)  # Individual Requirement 9: Replace missing data with the mean value for that column
         df['order_date'] = pd.to_datetime(df['order_date'], format='%m/%d/%Y', errors='coerce') # Converting order_date to proper date format
         df['sales'] = df['quantity'] * df['unit_price']  # Create a new 'sales' column as quantity * unit_price
 
@@ -44,6 +49,18 @@ def load_csv(filepath):
     except Exception as e:
         print(f"Error loading CSV file: {e}") # Failure message with error details
         return None
+    
+# Define function to export pivot tables to Excel
+def export_to_excel(dataframe):
+    try:
+        filename = input("\nWould you like to export the results to an Excel file? Enter filename (or press Enter to skip): ").strip()
+        if filename:
+            if not filename.endswith('.xlsx'):
+                filename += '.xlsx'
+            dataframe.to_excel(filename)
+            print(f"\nResults successfully exported as {filename}")
+    except Exception as e:
+        print(f"Error exporting to Excel: {e}")
 
 # Requirement 2
 # Define functions for each function the user can select from the menu
@@ -73,6 +90,7 @@ def sales_by_region_and_ordertype(dataframe):
     pivot_table = pd.pivot_table(dataframe, values='sales', index='sales_region', columns='order_type', aggfunc='sum', fill_value=0)
     print("\nTotal sales by region and order type:")
     print(pivot_table)
+    export_to_excel(pivot_table)
     return
 
 # 3. Function  to show average sales by region with average sales by state and sale type
@@ -80,6 +98,7 @@ def average_sales_by_region_state_ordertype(dataframe):
     pivot_table = pd.pivot_table(dataframe, values='sales', index='sales_region', columns=['customer_state', 'order_type'], aggfunc='mean', fill_value=0)
     print("\nAverage sales by region, state, and order type:")
     print(pivot_table)
+    export_to_excel(pivot_table)
     return
 
 # 4. Function to show sales by customer type and order type by state.
@@ -87,6 +106,7 @@ def sales_by_customer_type_and_order_type_by_state(dataframe):
     pivot_table = pd.pivot_table(dataframe, values='sales', index='customer_state', columns=['customer_type', 'order_type'], aggfunc='sum', fill_value=0)
     print("\nSales by customer type and order type by state:")
     print(pivot_table)
+    export_to_excel(pivot_table)
     return
 
 # 5. Function to show total sales quantity and price by region and product
@@ -94,6 +114,7 @@ def total_sales_by_region_and_product(dataframe):
     pivot_table = pd.pivot_table(dataframe, values=['quantity', 'unit_price'], index='produce_name', columns='sales_region', aggfunc='sum', fill_value=0)
     print("\nTotal sales by region and product:")
     print(pivot_table)
+    export_to_excel(pivot_table)
     return
 
 # 6. Function to show total sales quantity and price by customer and order type
@@ -101,6 +122,7 @@ def total_sales_by_customer_and_order_type(dataframe):
     pivot_table = pd.pivot_table(dataframe, values=['quantity', 'unit_price'], index=['customer_type', 'order_type'], aggfunc='sum', fill_value=0)
     print("\nTotal sales by customer type and order type:")
     print(pivot_table)
+    export_to_excel(pivot_table)
     return
 
 # 7. Function to show max and min sales price of sales by category
@@ -108,6 +130,7 @@ def max_min_sales_price_by_category(dataframe):
     pivot_table = pd.pivot_table(dataframe, values='unit_price', index='produce_name', columns='sales_region', aggfunc=['max', 'min'], fill_value=0)
     print("\nMax and min sales price by category:")
     print(pivot_table)
+    export_to_excel(pivot_table)
     return
 
 # 8. Function to show the number of employees by region
@@ -116,49 +139,86 @@ def show_employees_by_region(dataframe):
     pivot_table.columns = ['Number of Employees']
     print("\nNumber of employees by region:")
     print(pivot_table)
+    export_to_excel(pivot_table)
     return
+
+# Requirement 4
 
 # 9. Create a custom pivot table
 def custom_pivot_table(dataframe):
-    print("\nCreating a custom pivot table.")
-    print("Available columns:")
-    # List columns numbered for user selection
-    for i, col in enumerate(dataframe.columns, start=1):
-        print(f"{i}. {col}")
-    
-    # Prompt user to select index, columns, values, and aggregation function for the pivot table
-    try:
-        index_col = int(input("Select the index column (enter the number): ")) - 1
-        columns_col = int(input("Select the columns column (enter the number): ")) - 1
-        values_col = int(input("Select the values column (enter the number): ")) - 1
-        agg_func_input = input("Enter the aggregation function (sum, mean, max, min): ").strip().lower()
+    # Define options for rows, columns, values, and aggregation functions
+    row_options = {
+        '1': 'employee_name',
+        '2': 'sales_region',
+        '3': 'product_category'
+    }
+    column_options = {
+        '1': 'order_type',
+        '2': 'customer_type'
+    }
+    value_options = {
+        '1': 'quantity',
+        '2': 'unit_price'
+    }
+    agg_options = {
+        '1': 'sum',
+        '2': 'mean',
+        '3': 'count'
+    }
 
-        agg_func_map = {
-            'sum': 'sum',
-            'mean': 'mean',
-            'max': 'max',
-            'min': 'min'
-        }
+    # Get user inputs and validate that they are an option
+    while True:
+        print("\nSelect rows:")
+        for key, value in row_options.items():
+            print(f"{key}. {value}")
+        row_input = input("Enter the number(s) of your choice, separated by commas: ").strip().split(',')
+        if row_input and not all(choice.strip() not in row_options for choice in row_input):
+            break
+        print("\nInvalid selection for rows. Please try again.")
 
-        if agg_func_input not in agg_func_map:
-            print("Invalid aggregation function. Defaulting to sum.")
-            agg_func_input = 'sum'
+    while True:
+        print("\nSelect columns (optional):")
+        for key, value in column_options.items():
+            print(f"{key}. {value}")
+        column_input = input("Enter the number(s) of your choice, separated by commas: ").strip()
+        if column_input == '':
+            column_input = []
+            break
+        column_input = column_input.split(',')
+        if not all(choice.strip() not in column_options for choice in column_input):
+            break
+        print("\nInvalid selection for columns. Please try again.")
 
-        # Create the pivot table based on user selections
-        pivot_table = pd.pivot_table(dataframe, 
-                                     index=dataframe.columns[index_col], 
-                                     columns=dataframe.columns[columns_col], 
-                                     values=dataframe.columns[values_col], 
-                                     aggfunc=agg_func_map[agg_func_input], 
-                                     fill_value=0)
-        
-        # Display the custom pivot table
-        print("\nCustom Pivot Table:")
-        print(pivot_table)
+    while True:
+        print("\nSelect values:")
+        for key, value in value_options.items():
+            print(f"{key}. {value}")
+        value_input = input("Enter the number(s) of your choice, separated by commas: ").strip().split(',')
+        if value_input and not all(choice.strip() not in value_options for choice in value_input):
+            break
+        print("\nInvalid selection for values. Please try again.")
 
-    # Give an error message if the user input is invalid or if there is an issue creating the pivot table
-    except Exception as e:
-        print(f"Error creating custom pivot table: {e}")
+    while True:
+        print("\nSelect aggregation function:")
+        for key, value in agg_options.items():
+            print(f"{key}. {value}")
+        agg_input = input("Enter the number(s) of your choice, separated by commas: ").strip().split(',')
+        if agg_input and not all(choice.strip() not in agg_options for choice in agg_input):
+            break
+        print("\nInvalid selection for aggregation function. Please try again.")
+
+    # Assign user values to variables for pivot table creation
+    rows = [row_options.get(choice.strip()) for choice in row_input if choice.strip() in row_options]
+    columns = [column_options.get(choice.strip()) for choice in column_input if choice.strip() in column_options]
+    values = [value_options.get(choice.strip()) for choice in value_input if choice.strip() in value_options]
+    aggfuncs = [agg_options.get(choice.strip()) for choice in agg_input if choice.strip() in agg_options]
+
+    # Create the pivot table based on user selections
+    pivot_table = pd.pivot_table(dataframe, values=values, index=rows, columns=columns if columns else None, aggfunc=aggfuncs[0], fill_value=0)
+    print("\nCustom Pivot Table:")
+    print(pivot_table)
+    export_to_excel(pivot_table)
+    return pivot_table
 
 # 10. Function to exit the program
 def exit_program(dataframe):
@@ -184,7 +244,7 @@ def display_menu(dataframe):
     for i, (description, _) in enumerate(menu_options, start=1):
         print(f"{i}. {description}")
 
-    # Process the user's choice and call the corresponding function, with error handling for invalid input
+    # Process the user's choice and call the corresponding function
     try:
         menu_len = len(menu_options)
         choice = int(input(f"Enter your choice (1-{menu_len}): "))
@@ -206,7 +266,7 @@ sales_data = load_csv(filename)
 # Run the main processing loop
 def main():
     while True:
-        print("Sales Data Dashboard")
+        print("\nSales Data Dashboard")
         display_menu(sales_data)
 
 # Check if this is the main module being run
