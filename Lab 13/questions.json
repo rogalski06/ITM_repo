@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {
+      "question": "What is Lightning McQueen's racing number?",
+      "options": ["95", "67", "21", "77"]
+    },
+    {
+      "question": "What is the name of the town where Lightning McQueen gets stranded?",
+      "options": ["Radiator Springs", "Los Angeles", "New York", "San Francisco"]
+    },
+    {
+      "question": "What is Lightning McQueen's catchphrase?",
+      "options": ["Ka-Chow!", "You're On!", "Ka-Chigga!", "I am speed!"]
+    },
+    {
+      "question": "Who is Lightning McQueen's best friend in Radiator Springs?",
+      "options": ["Mater", "Sally", "Doc Hudson", "Luigi"]
+    },
+    {
+      "question": "What is the name of the racing cup?",
+      "options": ["Piston Cup", "Turbo Cup", "Engine Cup", "Racer Cup"]
+    }
+  ]
+}
