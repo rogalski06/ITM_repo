@@ -1,134 +1,19 @@
+<!--Home Page-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lightning McQueen Quiz Game</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            width: 100%;
-            padding: 50px 40px;
-            text-align: center;
-        }
-        
-        .header {
-            margin-bottom: 30px;
-        }
-        
-        .header h1 {
-            color: #E74C3C;
-            font-size: 3em;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .subtitle {
-            color: #1a1a1a;
-            font-size: 1.2em;
-            margin-bottom: 30px;
-        }
-        
-        .description {
-            background: #FFF8E7;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            color: #333;
-            line-height: 1.6;
-            font-size: 1em;
-        }
-        
-        .features {
-            text-align: left;
-            background: #FFF3E0;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 35px;
-            border-left: 4px solid #E74C3C;
-        }
-        
-        .features h3 {
-            color: #1a1a1a;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-        
-        .features ul {
-            list-style: none;
-        }
-        
-        .features li {
-            color: #333;
-            margin: 10px 0;
-            font-size: 0.95em;
-        }
-        
-        .features li:before {
-            content: "✓ ";
-            color: #E74C3C;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        
-        .btn-start {
-            display: inline-block;
-            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
-            color: white;
-            padding: 15px 50px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 1.1em;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
-        }
-        
-        .btn-start:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.5);
-        }
-        
-        .btn-start:active {
-            transform: translateY(-1px);
-        }
-        
-        .emoji {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="emoji">⚡🏎️</div>
+            <div class="emoji">🏎️⚡</div>
             <h1>Lightning McQueen Quiz</h1>
-            <p class="subtitle">Test your knowledge of the legendary race car!</p>
+            <p class="subtitle">Welcome back, {{ session.username }}! Test your knowledge of the legendary race car!</p>
         </div>
         
         <div class="description">
@@ -147,7 +32,13 @@
             </ul>
         </div>
         
-        <a href="/start" class="btn-start">🚀 Start Quiz</a>
+        <!-- Start Quiz Button -->
+        <a href="/start" class="btn-start">Start Quiz!</a>
+        
+        <!-- Logout Button -->
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/logout" style="color: #666; text-decoration: none; font-size: 14px;">Logout</a>
+        </div>
     </div>
 </body>
 </html>

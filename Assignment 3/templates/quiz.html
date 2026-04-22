@@ -1,257 +1,19 @@
+<!-- Quiz Page -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Lightning Mcqueen Quiz Game!</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            max-width: 700px;
-            width: 100%;
-            padding: 40px;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .header h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-        
-        .progress {
-            background: #e0e0e0;
-            height: 8px;
-            border-radius: 4px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            background: #667eea;
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-        
-        .question-counter {
-            color: #666;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-        
-        #timer {
-            font-size: 1.5em;
-            color: #667eea;
-            text-align: center;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-        
-        #timer.warning {
-            color: #ff6b6b;
-            animation: pulse 0.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .question-text {
-            font-size: 1.3em;
-            color: #333;
-            margin: 30px 0;
-            line-height: 1.6;
-        }
-        
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 30px 0;
-        }
-        
-        .option {
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: white;
-        }
-        
-        .option:hover {
-            border-color: #667eea;
-            background: #f5f7ff;
-        }
-        
-        .option.selected {
-            border-color: #667eea;
-            background: #e8ecff;
-        }
-        
-        .option.correct {
-            border-color: #51cf66;
-            background: #e7f5e7;
-            color: #2d5016;
-        }
-        
-        .option.incorrect {
-            border-color: #ff6b6b;
-            background: #ffe7e7;
-            color: #5c0014;
-        }
-        
-        .option-label {
-            font-weight: bold;
-            color: #667eea;
-            margin-right: 10px;
-        }
-        
-        .option.correct .option-label,
-        .option.incorrect .option-label {
-            color: inherit;
-        }
-        
-        .buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-            justify-content: center;
-        }
-        
-        button {
-            padding: 12px 30px;
-            font-size: 1em;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-        }
-        
-        .btn-submit {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-submit:hover:not(:disabled) {
-            background: #5568d3;
-            transform: translateY(-2px);
-        }
-        
-        .btn-submit:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        
-        .btn-next {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-next:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-        }
-        
-        .results {
-            text-align: center;
-        }
-        
-        .results h2 {
-            color: #333;
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        
-        .score-display {
-            background: #f5f7ff;
-            padding: 30px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .score-display p {
-            font-size: 1.2em;
-            color: #666;
-            margin: 10px 0;
-        }
-        
-        .score-display .big-score {
-            font-size: 3em;
-            color: #667eea;
-            font-weight: bold;
-            margin: 15px 0;
-        }
-        
-        .feedback {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            display: none;
-        }
-        
-        .feedback.show {
-            display: block;
-        }
-        
-        .feedback.correct {
-            background: #e7f5e7;
-            color: #2d5016;
-            border-left: 4px solid #51cf66;
-        }
-        
-        .feedback.incorrect {
-            background: #ffe7e7;
-            color: #5c0014;
-            border-left: 4px solid #ff6b6b;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        .btn-restart {
-            background: #51cf66;
-            color: white;
-            margin-top: 20px;
-        }
-        
-        .btn-restart:hover {
-            background: #40c057;
-            transform: translateY(-2px);
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <!-- Quiz Section -->
         <div id="quiz-section">
             <div class="header">
-                <h1>🎮 Quiz Game</h1>
+                <h1>Lightning McQueen Quiz</h1>
                 <div id="timer">10</div>
                 <div class="progress">
                     <div class="progress-bar" id="progress-bar"></div>
@@ -273,14 +35,19 @@
         <!-- Results Section -->
         <div id="results-section" class="hidden">
             <div class="results">
-                <h2>🎉 Quiz Complete!</h2>
+                <h2>Quiz Complete!</h2>
                 <div class="score-display">
                     <p>Your Final Score</p>
                     <div class="big-score" id="final-score">0/0</div>
                     <p id="percentage">0%</p>
                     <p>Bonus Points: <strong id="bonus-points">0</strong></p>
                 </div>
-                <button class="btn-restart" onclick="restartQuiz()">Take Quiz Again</button>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn-start" onclick="showReview()">Review Missed Questions</button>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="/" style="color: #666; text-decoration: none; font-size: 14px;">Take Another Quiz</a>
+                </div>
             </div>
         </div>
     </div>
@@ -374,7 +141,7 @@
             answered = true;
             clearInterval(timerInterval);
             
-            const timeTaken = 10 - timeRemaining + (startTime ? (Date.now() - startTime) / 1000 : 0);
+            const timeTaken = startTime ? (Date.now() - startTime) / 1000 : null;
             
             try {
                 const response = await fetch('/api/answer', {
@@ -464,7 +231,7 @@
                     document.getElementById('results-section').classList.remove('hidden');
                     
                     document.getElementById('final-score').textContent = 
-                        `${data.num_correct}/${data.total_questions}`;
+                        `${data.num_correct}/5`;
                     document.getElementById('percentage').textContent = 
                         `${data.percentage}%`;
                     document.getElementById('bonus-points').textContent = 
@@ -483,7 +250,11 @@
             initQuiz();
         }
         
-        // Start timer
+        // Show review of missed questions
+        function showReview() {
+            window.location.href = '/review';
+        }
+        
         function startTimer(duration) {
             timeRemaining = duration;
             startTime = Date.now();

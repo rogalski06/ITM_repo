@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Lightning McQueen Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="emoji">🏎️⚡</div>
+            <h1>Lightning McQueen Quiz</h1>
+            <p class="subtitle">Login to start your quiz!</p>
+        </div>
+        
+        <div class="description">
+            <p>Please login with your username and password to access the quiz.</p>
+        </div>
+        
+        <form method="POST" style="text-align: center;">
+            <div style="margin-bottom: 20px;">
+                <input type="text" name="username" placeholder="Username" required 
+                       style="padding: 10px; width: 250px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <input type="password" name="password" placeholder="Password" required 
+                       style="padding: 10px; width: 250px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+            </div>
+            <button type="submit" class="btn-start" style="margin-bottom: 20px;">Login</button>
+        </form>
+        
+        <div style="text-align: center;">
+            <p>Don't have an account? <a href="/register" style="color: #E74C3C; text-decoration: none; font-weight: bold;">Register here</a></p>
+        </div>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div style="margin-top: 20px; padding: 10px; background: #ffe7e7; color: #5c0014; border-radius: 8px; border-left: 4px solid #ff6b6b;">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

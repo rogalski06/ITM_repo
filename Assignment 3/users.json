@@ -1,0 +1,10 @@
+{
+  "testuser": {
+    "password_hash": "scrypt:32768:8:1$7rqMuAnnJOagFPDr$c587c733f0592ae337064cdb7fc5cd8c1f70ec7dddd6e9bc1be92e9b6330078fdb226c9208716678cb9102efb1e07582c3a10272c5dc8a11b2be550ecdc18c53",
+    "created_at": "2026-04-21T22:38:05.172303"
+  },
+  "rogalski": {
+    "password_hash": "scrypt:32768:8:1$A6KUzchG7ssRKRxf$241280fd61c8648ac9b425871820d2fa50b797f1992e3828edee073cae6c41f0e502a683aff6d2f6ae33a4853768ac03ee7f03fc37e10cd2654cd045ebdb20ac",
+    "created_at": "2026-04-21T22:52:25.680772"
+  }
+}

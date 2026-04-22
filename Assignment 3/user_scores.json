@@ -1,0 +1,18 @@
+{
+  "rogalski": [
+    {
+      "timestamp": "2026-04-21T22:52:49.412794",
+      "num_correct": 5,
+      "total_questions": 5,
+      "bonus_points": 14,
+      "percentage": 100.0
+    },
+    {
+      "timestamp": "2026-04-21T22:59:32.111716",
+      "num_correct": 4,
+      "total_questions": 5,
+      "bonus_points": 12,
+      "percentage": 80.0
+    }
+  ]
+}

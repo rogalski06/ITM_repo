@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review - Lightning McQueen Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="emoji">📚🔍</div>
+            <h1>Review Missed Questions</h1>
+            <p class="subtitle">Learn from your mistakes, {{ session.username }}!</p>
+        </div>
+
+        {% if missed_questions %}
+            <div style="margin-bottom: 30px;">
+                <p style="text-align: center; color: #666; font-size: 1.1em;">
+                    You missed {{ missed_questions|length }} question{{ 's' if missed_questions|length != 1 else '' }}. 
+                    Here's a review with explanations to help you learn:
+                </p>
+            </div>
+
+            {% for question in missed_questions %}
+            <div class="question-review" style="background: #FFF8E7; padding: 25px; border-radius: 10px; margin-bottom: 25px; border-left: 4px solid #E74C3C;">
+                <h3 style="color: #E74C3C; margin-bottom: 15px; font-size: 1.2em;">
+                    Question {{ question.question_number }}: {{ question.question }}
+                </h3>
+
+                <div style="margin-bottom: 15px;">
+                    <p style="color: #ff6b6b; font-weight: bold; margin-bottom: 5px;">
+                        ❌ Your Answer: {{ question.user_answer }}
+                    </p>
+                    <p style="color: #51cf66; font-weight: bold;">
+                        ✅ Correct Answer: {{ question.correct_answer }}
+                    </p>
+                </div>
+
+                <div class="explanation" style="background: #FFF3E0; padding: 15px; border-radius: 8px; border-left: 3px solid #E74C3C;">
+                    <h4 style="color: #1a1a1a; margin-bottom: 10px; font-size: 1em;">💡 Explanation:</h4>
+                    <p style="color: #333; line-height: 1.6; margin: 0;">{{ question.explanation }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="color: #666; margin-bottom: 20px; font-size: 1.1em;">
+                    Great job completing the quiz! Keep practicing to improve your score.
+                </p>
+                <a href="/" class="btn-start">Take Another Quiz</a>
+            </div>
+        {% else %}
+            <div style="text-align: center; background: #e7f5e7; padding: 40px; border-radius: 10px; border: 2px solid #51cf66;">
+                <h2 style="color: #2d5016; margin-bottom: 20px;">🎉 Perfect Score!</h2>
+                <p style="color: #2d5016; font-size: 1.2em; margin-bottom: 30px;">
+                    Congratulations! You answered all questions correctly. You're a true Lightning McQueen expert!
+                </p>
+                <a href="/" class="btn-start">Take Another Quiz</a>
+            </div>
+        {% endif %}
+
+        <!-- Logout link -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/logout" style="color: #666; text-decoration: none; font-size: 14px;">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

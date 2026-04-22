@@ -2,3 +2,15 @@
 2026-04-21 15:27:51 - 5/5 correct, points = 13
 2026-04-21 15:30:45 - 5/5 correct, points = 15
 2026-04-21 15:41:22 - 5/5 correct, points = 15
+2026-04-21 21:16:21 - 5/5 correct, points = 13
+2026-04-21 21:25:30 - 5/5 correct, points = 10
+2026-04-21 21:31:56 - 5/5 correct, points = 15
+2026-04-21 21:38:26 - 4/5 correct, points = 8
+2026-04-21 21:45:42 - 4/5 correct, points = 11
+2026-04-21 21:49:24 - 5/5 correct, points = 13
+2026-04-21 22:19:51 - 5/5 correct, points = 13
+2026-04-21 22:23:19 - 3/5 correct, points = 9
+2026-04-21 22:29:10 - Katherine - 4/5 correct, points = 12
+2026-04-21 22:47:13 - 5/5 correct, points = 14
+2026-04-21 22:52:49 - rogalski: 5/5 correct, points = 14
+2026-04-21 22:59:32 - rogalski: 4/5 correct, points = 12

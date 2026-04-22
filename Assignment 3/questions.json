@@ -2,23 +2,28 @@
   "questions": [
     {
       "question": "What is Lightning McQueen's racing number?",
-      "options": ["95", "67", "21", "77"]
+      "options": ["95", "67", "21", "77"],
+      "explanation": "Lightning McQueen's racing number is 95, which he proudly displays on his red racing car throughout the movie."
     },
     {
       "question": "What is the name of the town where Lightning McQueen gets stranded?",
-      "options": ["Radiator Springs", "Los Angeles", "New York", "San Francisco"]
+      "options": ["Radiator Springs", "Los Angeles", "New York", "San Francisco"],
+      "explanation": "Lightning McQueen gets stranded in Radiator Springs, a small forgotten town on Route 66 that he initially wants to leave but eventually grows to love."
     },
     {
       "question": "What is Lightning McQueen's catchphrase?",
-      "options": ["Ka-Chow!", "You're On!", "Ka-Chigga!", "I am speed!"]
+      "options": ["Ka-Chow!", "You're On!", "Ka-Chigga!", "I am speed!"],
+      "explanation": "Lightning McQueen's signature catchphrase is 'Ka-Chow!', which he uses to celebrate victories and show off his speed."
     },
     {
       "question": "Who is Lightning McQueen's best friend in Radiator Springs?",
-      "options": ["Mater", "Sally", "Doc Hudson", "Luigi"]
+      "options": ["Mater", "Sally", "Doc Hudson", "Luigi"],
+      "explanation": "Mater becomes Lightning McQueen's best friend in Radiator Springs. The tow truck with a heart of gold helps McQueen learn about friendship and loyalty."
     },
     {
       "question": "What is the name of the racing cup?",
-      "options": ["Piston Cup", "Turbo Cup", "Engine Cup", "Racer Cup"]
+      "options": ["Piston Cup", "Turbo Cup", "Engine Cup", "Racer Cup"],
+      "explanation": "The Piston Cup is the prestigious racing championship that Lightning McQueen is competing for in the movie 'Cars'."
     }
   ]
 }
