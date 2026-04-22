@@ -13,6 +13,13 @@
       "total_questions": 5,
       "bonus_points": 12,
       "percentage": 80.0
+    },
+    {
+      "timestamp": "2026-04-21T23:10:13.723372",
+      "num_correct": 0,
+      "total_questions": 5,
+      "bonus_points": 0,
+      "percentage": 0.0
     }
   ]
 }

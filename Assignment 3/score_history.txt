@@ -13,4 +13,4 @@
 2026-04-21 22:29:10 - Katherine - 4/5 correct, points = 12
 2026-04-21 22:47:13 - 5/5 correct, points = 14
 2026-04-21 22:52:49 - rogalski: 5/5 correct, points = 14
-2026-04-21 22:59:32 - rogalski: 4/5 correct, points = 12
+2026-04-21 22:59:32 - rogalski: 4/5 correct, points = 122026-04-21 23:10:13 - rogalski: 0/5 correct, points = 0
