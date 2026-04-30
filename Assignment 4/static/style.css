@@ -1,0 +1,92 @@
+/* 
+   Main styling for the whole DigiBooth website.
+   This gives every page a consistent theme.
+*/
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff0f6; /* light pink background */
+    color: #333;
+    text-align: center;
+    padding: 40px;
+}
+
+/* Main page titles */
+h1 {
+    color: #d63384;
+    margin-bottom: 10px;
+}
+
+/* Tagline under the home page title */
+.tagline {
+    font-size: 20px;
+    font-weight: bold;
+    color: #b02a6b;
+}
+
+/* Buttons and navigation links */
+a, button {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 16px;
+    background-color: #d63384;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Changes button color slightly when user hovers */
+a:hover, button:hover {
+    background-color: #b02a6b;
+}
+
+/* Form box styling */
+form {
+    display: inline-block;
+    text-align: left;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    min-width: 280px;
+}
+
+/* Labels and input fields */
+label, input {
+    display: block;
+    margin: 8px 0;
+}
+
+/* Input box styling */
+input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+/* Error message styling */
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+
+/* Groups buttons together cleanly */
+.button-row {
+    margin-top: 20px;
+}
+
+/* Placeholder card for feed posts */
+.post-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 400px;
+    text-align: left;
+}
+
+/* Success message styling */
+.success-message {
+    color: green;
+    font-weight: bold;
+}

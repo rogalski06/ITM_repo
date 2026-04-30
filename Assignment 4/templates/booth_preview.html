@@ -1,0 +1,56 @@
+@app.route("/booth_capture", methods=["POST"])
+def booth_capture():
+    """
+    Handles photos taken from the camera.
+    Saves captured images to static/uploads.
+    """
+
+    if "username" not in session:
+        return render_template(
+            "signin.html",
+            error="Please sign in before using the photobooth."
+        )
+
+    captured_images = request.form.getlist("captured_images")
+
+    filter_choice = request.form.get("filter_choice", "none")
+    frame_choice = request.form.get("frame_choice", "none")
+    layout_choice = request.form.get("layout_choice", "strip")
+
+    if not captured_images:
+        return render_template(
+            "booth.html",
+            username=session["username"],
+            error="Please take at least one photo."
+        )
+
+    saved_images = []
+
+    for image_data in captured_images:
+        if "," in image_data:
+            image_data = image_data.split(",")[1]
+
+        image_bytes = base64.b64decode(image_data)
+
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+        filename = f"{session['username']}_{timestamp}.png"
+
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+
+        with open(file_path, "wb") as image_file:
+            image_file.write(image_bytes)
+
+        saved_images.append(filename)
+
+    booth_data = {
+        "image_filenames": saved_images,
+        "filter_choice": filter_choice,
+        "frame_choice": frame_choice,
+        "layout_choice": layout_choice,
+        "username": session["username"],
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    session["booth_data"] = booth_data
+
+    return render_template("booth_preview.html", booth_data=booth_data)

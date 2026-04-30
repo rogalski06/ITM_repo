@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Email - DigiBooth</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <h1>Confirm Your Email</h1>
+
+    <p>
+        A confirmation code has been sent to your Hawaiʻi.edu email.
+        Enter the code below to activate your DigiBooth account.
+    </p>
+
+    {% if error %}
+        <p class="error-message">{{ error }}</p>
+    {% endif %}
+
+    {% if message %}
+        <p class="success-message">{{ message }}</p>
+    {% endif %}
+
+    <form action="/confirm_submit" method="POST">
+        <label>Email:</label>
+        <input type="email" name="email" placeholder="example@hawaii.edu">
+
+        <label>Confirmation Code:</label>
+        <input type="text" name="confirmation_code" placeholder="Enter code">
+
+        <button type="submit">Confirm Account</button>
+    </form>
+
+    <a href="/">Back Home</a>
+
+</body>
+</html>

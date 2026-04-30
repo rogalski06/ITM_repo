@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DigiBooth | Home</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fdeef5;
+            text-align: center;
+            margin: 0;
+            padding: 60px;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 36px;
+        }
+
+        h2 {
+            color: #b8236a;
+            font-size: 22px;
+        }
+
+        p {
+            font-size: 18px;
+            color: #222;
+        }
+
+        nav {
+            margin-top: 30px;
+        }
+
+        nav a {
+            display: inline-block;
+            background-color: #d63384;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 8px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>DigiBooth</h1>
+    <h2>Capture. Customize. Connect.</h2>
+
+    <p>
+        DigiBooth is a UH Mānoa photobooth-style web app where users can create,
+        customize, and share fun photo posts.
+    </p>
+
+    <nav>
+        <a href="/">Home</a>
+
+        {% if session.get("username") %}
+            <a href="/feed">Feed</a>
+            <a href="/booth">Booth</a>
+            <a href="/logout">Logout</a>
+        {% else %}
+            <a href="/signup">Sign Up</a>
+            <a href="/signin">Sign In</a>
+        {% endif %}
+    </nav>
+
+</body>
+</html>

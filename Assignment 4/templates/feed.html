@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feed - DigiBooth</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="/">Home</a>
+
+        {% if session.get("username") %}
+            <a href="/feed">Feed</a>
+            <a href="/booth">Booth</a>
+            <a href="/logout">Logout</a>
+        {% else %}
+            <a href="/signup">Sign Up</a>
+            <a href="/signin">Sign In</a>
+        {% endif %}
+    </nav>
+
+    <h1>DigiBooth Feed</h1>
+
+    <p>
+        This page will eventually show public photo posts from DigiBooth users.
+    </p>
+
+    <div class="post-card">
+        <h3>Example Post</h3>
+        <p>Photo preview will go here.</p>
+        <p><strong>Caption:</strong> Study break at UH Mānoa</p>
+        <p><strong>Tags:</strong> #study #campus #friends</p>
+    </div>
+
+    <br>
+
+    <a href="/">Back Home</a>
+
+</body>
+</html>

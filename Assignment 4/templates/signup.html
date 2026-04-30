@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up - DigiBooth</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="/">Home</a>
+
+        {% if session.get("username") %}
+            <a href="/feed">Feed</a>
+            <a href="/booth">Booth</a>
+            <a href="/logout">Logout</a>
+        {% else %}
+            <a href="/signup">Sign Up</a>
+            <a href="/signin">Sign In</a>
+        {% endif %}
+    </nav>
+
+    <h1>Create Your DigiBooth Account</h1>
+
+    <p>
+        Sign up with your UH email to join the DigiBooth community.
+    </p>
+
+    {% if error %}
+        <p class="error-message">{{ error }}</p>
+    {% endif %}
+
+    <form action="/signup_submit" method="POST">
+
+        <label>Name:</label>
+        <input type="text" name="name" placeholder="Enter your name" required>
+
+        <label>Username:</label>
+        <input type="text" name="username" placeholder="Choose a username" required>
+
+        <label>Hawaii.edu Email:</label>
+        <input type="email" name="email" placeholder="example@hawaii.edu" required>
+
+        <button type="submit">Create Account</button>
+
+    </form>
+
+    <br>
+
+    <a href="/">Back Home</a>
+
+</body>
+</html>
