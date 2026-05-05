@@ -120,7 +120,13 @@
 
    <div class="edit-form">
        <h3>Edit Profile</h3>
+       {% if error %}
+           <p class="error">{{ error }}</p>
+       {% endif %}
        <form action="/update_profile" method="POST" enctype="multipart/form-data">
+           <label>Username:</label>
+           <input type="text" name="username" value="{{ user['username'] }}" required>
+           <br><br>
            <label>Profile Image:</label>
            <input type="file" name="profile_image" accept="image/*">
            <br><br>

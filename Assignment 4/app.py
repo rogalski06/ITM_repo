@@ -130,6 +130,16 @@ def user_exists(username, email):
    return existing_user is not None
 
 
+def username_exists(username):
+   conn = get_db_connection()
+   existing_user = conn.execute(
+       "SELECT 1 FROM users WHERE username = ?",
+       (username,)
+   ).fetchone()
+   conn.close()
+   return existing_user is not None
+
+
 
 
 def save_new_user(name, username, email, confirmation_code):
@@ -191,51 +201,41 @@ def update_user_profile(username, profile_image=None, bio=None):
        conn.execute("UPDATE users SET bio = ? WHERE username = ?", (bio, username))
    conn.commit()
    conn.close()
+
+
+def send_confirmation_email(to_email, confirmation_code):
    sender_email = os.getenv("DIGIBOOTH_EMAIL")
    sender_password = os.getenv("DIGIBOOTH_EMAIL_PASSWORD")
-
 
    if not sender_email or not sender_password:
        print("Email credentials are missing.")
        return False
-
 
    message = EmailMessage()
    message["Subject"] = "Your DigiBooth Confirmation Code"
    message["From"] = sender_email
    message["To"] = to_email
 
-
    message.set_content(f"""
 Aloha,
 
-
 Thank you for signing up for DigiBooth!
-
 
 Your confirmation code is:
 
-
 {confirmation_code}
 
-
 Enter this code on the DigiBooth confirmation page to activate your account.
-
 
 Mahalo,
 The DigiBooth Team
 """)
 
-
    try:
        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
            smtp.login(sender_email, sender_password)
            smtp.send_message(message)
-
-
        return True
-
-
    except Exception as error:
        print("Email failed to send:", error)
        return False
@@ -523,21 +523,60 @@ def update_profile():
    if "username" not in session:
        return redirect("/signin")
 
-   username = session["username"]
+   current_username = session["username"]
+   new_username = request.form.get("username", "").strip()
    bio = request.form.get("bio", "").strip()
+
+   if not new_username:
+       return render_profile_error(current_username, "Username cannot be empty.")
+
+   if new_username != current_username and username_exists(new_username):
+       return render_profile_error(current_username, "That username is already taken.")
 
    profile_image = None
    if "profile_image" in request.files:
        file = request.files["profile_image"]
        if file and file.filename:
-           filename = f"{username}_profile_{datetime.now().strftime('%Y%m%d%H%M%S')}.png"
+           filename = f"{new_username}_profile_{datetime.now().strftime('%Y%m%d%H%M%S')}.png"
            file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
            file.save(file_path)
            profile_image = filename
 
-   update_user_profile(username, profile_image, bio)
+   if new_username != current_username:
+       conn = get_db_connection()
+       conn.execute(
+           "UPDATE users SET username = ? WHERE username = ?",
+           (new_username, current_username)
+       )
+       conn.execute(
+           "UPDATE posts SET username = ? WHERE username = ?",
+           (new_username, current_username)
+       )
+       conn.commit()
+       conn.close()
+       session["username"] = new_username
+       username_to_save = new_username
+   else:
+       username_to_save = current_username
+
+   update_user_profile(username_to_save, profile_image, bio)
 
    return redirect("/profile")
+
+
+def render_profile_error(username, error_message):
+   conn = get_db_connection()
+   user = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+   user_posts = conn.execute("SELECT * FROM posts WHERE username = ? ORDER BY timestamp DESC", (username,)).fetchall()
+   conn.close()
+
+   posts = []
+   for row in user_posts:
+       post = dict(row)
+       post["image_filenames"] = json.loads(post["image_filenames"])
+       posts.append(post)
+
+   return render_template("profile.html", user=user, posts=posts, error=error_message)
 
 
 # --------------------------------
