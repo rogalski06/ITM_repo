@@ -640,7 +640,7 @@ def booth_capture():
 
 
        timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
-       filename = f"{session['username']}_{timestamp}.png"
+       filename = f"{session['username']}_{timestamp}.jpg"
        file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
 
 

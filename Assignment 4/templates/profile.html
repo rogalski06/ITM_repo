@@ -152,7 +152,7 @@
                        {% if post['caption'] %} | {{ post['caption'] }}{% endif %}
                        {% if post['tags'] %} | Tags: {{ post['tags'] }}{% endif %}
                    </div>
-                   <div class="post-images">
+                   <div class="post-images frame-{{ post['frame_choice'] }}">
                        {% for filename in post['image_filenames'] %}
                            <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Photo">
                        {% endfor %}

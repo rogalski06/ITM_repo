@@ -260,6 +260,24 @@ video {
    box-shadow: 0 0 0 6px #d8f0ff, 0 0 0 11px black;
 }
 
+.frame-film {
+   background: repeating-linear-gradient(
+       90deg,
+       white 0px,
+       white 18px,
+       black 18px,
+       black 28px
+   );
+   box-shadow: 0 0 0 6px white, 0 0 0 11px black;
+   border-color: black;
+}
+
+.frame-classic {
+   border-color: black;
+   background: white;
+   box-shadow: 0 0 0 6px white, 0 0 0 11px black;
+}
+
 
 /* ===== SMALL HELP TEXT ===== */
 .caption {
