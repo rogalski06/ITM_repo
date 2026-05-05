@@ -1,41 +1,201 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Feed - DigiBooth</title>
+   <title>Feed - DigiBooth</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-    <link rel="stylesheet" href="/static/style.css">
+
+   <style>
+       .feed-wall {
+           width: 850px;
+           min-height: 450px;
+           margin: 35px auto;
+           padding: 35px;
+           border: 6px solid black;
+           background: white;
+           display: flex;
+           flex-wrap: wrap;
+           justify-content: center;
+           align-items: flex-start;
+           gap: 35px;
+       }
+
+
+       .wall-label {
+           width: 100%;
+           font-size: 26px;
+           font-weight: bold;
+           margin-bottom: 10px;
+           text-align: center;
+       }
+
+
+       .post-card {
+           width: 260px;
+           padding: 18px;
+           border: 5px solid black;
+           background: white;
+           text-align: center;
+       }
+
+
+       .posted-strip {
+           width: 170px;
+           margin: 10px auto 18px;
+           border: 5px solid black;
+           background: white;
+           padding: 8px;
+       }
+
+
+       .posted-photo {
+           border-bottom: 5px solid black;
+           background: white;
+       }
+
+
+       .posted-photo:last-child {
+           border-bottom: none;
+       }
+
+
+       .posted-photo img {
+           width: 100%;
+           height: auto;
+           display: block;
+           object-fit: contain;
+       }
+
+
+       .caption {
+           font-size: 16px;
+           margin: 8px 0;
+       }
+
+
+       .tag {
+           font-weight: bold;
+           font-size: 15px;
+           margin: 8px 0;
+       }
+
+
+       .timestamp {
+           font-size: 12px;
+           margin-top: 10px;
+       }
+
+
+       .empty-feed {
+           font-size: 20px;
+           margin: 40px;
+       }
+
+
+       button {
+           margin: 8px;
+           padding: 10px 14px;
+           border: 3px solid black;
+           background: white;
+           font-weight: bold;
+           cursor: pointer;
+       }
+
+
+       .create-button {
+           margin-top: 20px;
+           background: white;
+           color: black;
+       }
+   </style>
 </head>
+
+
 <body>
 
-    <nav>
-        <a href="/">Home</a>
 
-        {% if session.get("username") %}
-            <a href="/feed">Feed</a>
-            <a href="/booth">Booth</a>
-            <a href="/logout">Logout</a>
-        {% else %}
-            <a href="/signup">Sign Up</a>
-            <a href="/signin">Sign In</a>
-        {% endif %}
-    </nav>
+<nav>
+   <a href="/">Home</a>
 
-    <h1>DigiBooth Feed</h1>
 
-    <p>
-        This page will eventually show public photo posts from DigiBooth users.
-    </p>
+   {% if session.get("username") %}
+       <a href="/feed">Feed</a>
+       <a href="/booth">Booth</a>
+       <a href="/logout">Logout</a>
+   {% else %}
+       <a href="/signup">Sign Up</a>
+       <a href="/signin">Sign In</a>
+   {% endif %}
+</nav>
 
-    <div class="post-card">
-        <h3>Example Post</h3>
-        <p>Photo preview will go here.</p>
-        <p><strong>Caption:</strong> Study break at UH Mānoa</p>
-        <p><strong>Tags:</strong> #study #campus #friends</p>
-    </div>
 
-    <br>
+<form action="/feed" method="GET" class="search-box">
+   <input
+       type="text"
+       name="q"
+       placeholder="Search users or tags..."
+       value="{{ search_query }}"
+   >
 
-    <a href="/">Back Home</a>
+
+   <button type="submit">Search</button>
+
+
+   {% if search_query %}
+       <a class="button-link" href="/feed">Clear</a>
+   {% endif %}
+</form>
+
+
+<div class="feed-wall">
+   <div class="wall-label">posted strips</div>
+
+
+   {% if posts %}
+       {% for post in posts %}
+           <div class="post-card">
+
+
+               <div class="posted-strip">
+                   {% for image in post.image_filenames %}
+                       <div class="posted-photo">
+                           <img
+                               src="{{ url_for('static', filename='uploads/' + image) }}"
+                               alt="Posted photostrip photo"
+                           >
+                       </div>
+                   {% endfor %}
+               </div>
+
+
+               <p><strong>@{{ post.username }}</strong></p>
+
+
+               {% if post.caption %}
+                   <p class="caption">{{ post.caption }}</p>
+               {% endif %}
+
+
+               {% if post.tags %}
+                   <p class="tag">{{ post.tags }}</p>
+               {% endif %}
+
+
+               <p class="timestamp">{{ post.timestamp }}</p>
+
+
+           </div>
+       {% endfor %}
+   {% else %}
+       <p class="empty-feed">No posts yet. Create your first photostrip!</p>
+   {% endif %}
+</div>
+
+
+{% if session.get("username") %}
+   <a class="button-link create-button" href="/booth">Create a Photostrip →</a>
+{% endif %}
+
 
 </body>
 </html>

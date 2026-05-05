@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Confirm Email - DigiBooth</title>
-    <link rel="stylesheet" href="/static/style.css">
+   <title>Confirm Email - DigiBooth</title>
+   <link rel="stylesheet" href="/static/style.css">
+   <style>
+       button {
+           margin: 8px;
+           padding: 10px 14px;
+           border: 3px solid black;
+           background: white;
+           font-weight: bold;
+           cursor: pointer;
+       }
+   </style>
 </head>
 <body>
 
-    <h1>Confirm Your Email</h1>
 
-    <p>
-        A confirmation code has been sent to your Hawaiʻi.edu email.
-        Enter the code below to activate your DigiBooth account.
-    </p>
+   <h1>Confirm Your Email</h1>
 
-    {% if error %}
-        <p class="error-message">{{ error }}</p>
-    {% endif %}
 
-    {% if message %}
-        <p class="success-message">{{ message }}</p>
-    {% endif %}
+   <p>
+       A confirmation code has been sent to your Hawaiʻi.edu email.
+       Enter the code below to activate your DigiBooth account.
+   </p>
 
-    <form action="/confirm_submit" method="POST">
-        <label>Email:</label>
-        <input type="email" name="email" placeholder="example@hawaii.edu">
 
-        <label>Confirmation Code:</label>
-        <input type="text" name="confirmation_code" placeholder="Enter code">
+   {% if error %}
+       <p class="error-message">{{ error }}</p>
+   {% endif %}
 
-        <button type="submit">Confirm Account</button>
-    </form>
 
-    <a href="/">Back Home</a>
+   {% if message %}
+       <p class="success-message">{{ message }}</p>
+   {% endif %}
+
+
+   <form action="/confirm_submit" method="POST">
+       <label>Email:</label>
+       <input type="email" name="email" value="{{ email or '' }}" placeholder="example@hawaii.edu">
+
+
+       <label>Confirmation Code:</label>
+       <input type="text" name="confirmation_code" placeholder="Enter code">
+
+
+       <button type="submit">Confirm Account</button>
+   </form>
+
+
+   <a href="/">Back Home</a>
+
 
 </body>
 </html>
