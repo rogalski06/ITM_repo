@@ -168,6 +168,7 @@
    {% if session.get("username") %}
        <a href="/feed">Feed</a>
        <a href="/booth">Booth</a>
+       <a href="/profile">Profile</a>
        <a href="/logout">Logout</a>
    {% else %}
        <a href="/signup">Sign Up</a>
@@ -226,8 +227,13 @@
                placeholder="Example: #friends #campus #digibooth"
            >
 
+           <label>Visibility:</label>
+           <select name="privacy">
+               <option value="public">Public - show on feed</option>
+               <option value="private">Private - only visible on your profile</option>
+           </select>
 
-           <button class="post-button" type="submit">Post to Feed</button>
+           <button class="post-button" type="submit">Save Post</button>
        </form>
 
 

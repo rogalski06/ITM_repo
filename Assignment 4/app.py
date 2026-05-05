@@ -6,6 +6,7 @@ import os
 import smtplib
 from email.message import EmailMessage
 import base64
+import json
 
 
 app = Flask(__name__)
@@ -50,19 +51,53 @@ def create_users_table():
            email TEXT NOT NULL UNIQUE,
            confirmed INTEGER DEFAULT 0,
            confirmation_code TEXT NOT NULL,
-           created_at TEXT NOT NULL
+           created_at TEXT NOT NULL,
+           profile_image TEXT,
+           bio TEXT
        )
    """)
 
 
+   # Add columns if they don't exist
+   try:
+       conn.execute("ALTER TABLE users ADD COLUMN profile_image TEXT")
+   except sqlite3.OperationalError:
+       pass  # Column already exists
+
+
+   try:
+       conn.execute("ALTER TABLE users ADD COLUMN bio TEXT")
+   except sqlite3.OperationalError:
+       pass  # Column already exists
+
+
+def create_posts_table():
+   conn = get_db_connection()
+
+
+   conn.execute("""
+       CREATE TABLE IF NOT EXISTS posts (
+           id INTEGER PRIMARY KEY AUTOINCREMENT,
+           username TEXT NOT NULL,
+           image_filenames TEXT NOT NULL,  -- JSON string
+           filter_choice TEXT,
+           frame_choice TEXT,
+           layout_choice TEXT,
+           caption TEXT,
+           tags TEXT,
+           timestamp TEXT NOT NULL,
+           privacy TEXT DEFAULT 'public'
+       )
+   """)
+
+   try:
+       conn.execute("ALTER TABLE posts ADD COLUMN privacy TEXT DEFAULT 'public'")
+   except sqlite3.OperationalError:
+       pass  # Column already exists
+
    conn.commit()
    conn.close()
 
-
-
-
-def validate_required_fields(name, username, email):
-   return bool(name and username and email)
 
 
 
@@ -148,12 +183,14 @@ def confirm_user_email(email, confirmation_code):
    conn.close()
 
 
-   return True
-
-
-
-
-def send_confirmation_email(to_email, confirmation_code):
+def update_user_profile(username, profile_image=None, bio=None):
+   conn = get_db_connection()
+   if profile_image is not None:
+       conn.execute("UPDATE users SET profile_image = ? WHERE username = ?", (profile_image, username))
+   if bio is not None:
+       conn.execute("UPDATE users SET bio = ? WHERE username = ?", (bio, username))
+   conn.commit()
+   conn.close()
    sender_email = os.getenv("DIGIBOOTH_EMAIL")
    sender_password = os.getenv("DIGIBOOTH_EMAIL_PASSWORD")
 
@@ -228,14 +265,6 @@ def signup():
 @app.route("/signin")
 def signin():
    return render_template("signin.html", error=None)
-
-
-
-
-@app.route("/logout")
-def logout():
-   session.clear()
-   return redirect("/")
 
 
 
@@ -419,7 +448,18 @@ def feed():
 
 
    search_query = request.args.get("q", "").strip().lower()
-   posts = session.get("posts", [])
+
+
+   conn = get_db_connection()
+   posts_rows = conn.execute("SELECT * FROM posts WHERE privacy = 'public' ORDER BY timestamp DESC").fetchall()
+   conn.close()
+
+
+   posts = []
+   for row in posts_rows:
+       post = dict(row)
+       post["image_filenames"] = json.loads(post["image_filenames"])
+       posts.append(post)
 
 
    if search_query:
@@ -449,6 +489,55 @@ def feed():
        posts=posts,
        search_query=search_query
    )
+
+
+@app.route("/logout")
+def logout():
+   session.clear()
+   return redirect("/signin")
+
+
+@app.route("/profile")
+def profile():
+   if "username" not in session:
+       return redirect("/signin")
+
+   username = session["username"]
+
+   conn = get_db_connection()
+   user = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+   user_posts = conn.execute("SELECT * FROM posts WHERE username = ? ORDER BY timestamp DESC", (username,)).fetchall()
+   conn.close()
+
+   posts = []
+   for row in user_posts:
+       post = dict(row)
+       post["image_filenames"] = json.loads(post["image_filenames"])
+       posts.append(post)
+
+   return render_template("profile.html", user=user, posts=posts)
+
+
+@app.route("/update_profile", methods=["POST"])
+def update_profile():
+   if "username" not in session:
+       return redirect("/signin")
+
+   username = session["username"]
+   bio = request.form.get("bio", "").strip()
+
+   profile_image = None
+   if "profile_image" in request.files:
+       file = request.files["profile_image"]
+       if file and file.filename:
+           filename = f"{username}_profile_{datetime.now().strftime('%Y%m%d%H%M%S')}.png"
+           file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+           file.save(file_path)
+           profile_image = filename
+
+   update_user_profile(username, profile_image, bio)
+
+   return redirect("/profile")
 
 
 # --------------------------------
@@ -592,23 +681,29 @@ def post_to_feed():
 
    caption = request.form.get("caption", "").strip()
    tags = request.form.get("tags", "").strip()
+   privacy = request.form.get("privacy", "public")
 
 
-   new_post = {
-       "image_filenames": booth_data["image_filenames"],
-       "filter_choice": booth_data["filter_choice"],
-       "frame_choice": booth_data["frame_choice"],
-       "layout_choice": booth_data["layout_choice"],
-       "username": session["username"],
-       "timestamp": booth_data["timestamp"],
-       "caption": caption,
-       "tags": tags
-   }
-
-
-   posts = session.get("posts", [])
-   posts.append(new_post)
-   session["posts"] = posts
+   conn = get_db_connection()
+   conn.execute(
+       """
+       INSERT INTO posts (username, image_filenames, filter_choice, frame_choice, layout_choice, caption, tags, timestamp, privacy)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+       """,
+       (
+           session["username"],
+           json.dumps(booth_data["image_filenames"]),
+           booth_data["filter_choice"],
+           booth_data["frame_choice"],
+           booth_data["layout_choice"],
+           caption,
+           tags,
+           booth_data["timestamp"],
+           privacy
+       )
+   )
+   conn.commit()
+   conn.close()
 
 
    session.pop("booth_data", None)
@@ -628,4 +723,5 @@ def post_to_feed():
 
 if __name__ == "__main__":
    create_users_table()
+   create_posts_table()
    app.run(debug=True)
