@@ -36,12 +36,8 @@ def get_db_connection():
    conn.row_factory = sqlite3.Row
    return conn
 
-
-
-
 def create_users_table():
    conn = get_db_connection()
-
 
    conn.execute("""
        CREATE TABLE IF NOT EXISTS users (
@@ -57,13 +53,11 @@ def create_users_table():
        )
    """)
 
-
    # Add columns if they don't exist
    try:
        conn.execute("ALTER TABLE users ADD COLUMN profile_image TEXT")
    except sqlite3.OperationalError:
        pass  # Column already exists
-
 
    try:
        conn.execute("ALTER TABLE users ADD COLUMN bio TEXT")
@@ -98,21 +92,11 @@ def create_posts_table():
    conn.commit()
    conn.close()
 
-
-
-
-
 def validate_hawaii_email(email):
    return email.lower().endswith("@hawaii.edu")
 
-
-
-
 def generate_confirmation_code():
    return str(secrets.randbelow(900000) + 100000)
-
-
-
 
 def user_exists(username, email):
    conn = get_db_connection()
@@ -122,13 +106,8 @@ def user_exists(username, email):
        "SELECT * FROM users WHERE username = ? OR email = ?",
        (username, email)
    ).fetchone()
-
-
    conn.close()
-
-
    return existing_user is not None
-
 
 def username_exists(username):
    conn = get_db_connection()
@@ -139,13 +118,8 @@ def username_exists(username):
    conn.close()
    return existing_user is not None
 
-
-
-
 def save_new_user(name, username, email, confirmation_code):
    conn = get_db_connection()
-
-
    conn.execute(
        """
        INSERT INTO users (name, username, email, confirmed, confirmation_code, created_at)
@@ -160,12 +134,8 @@ def save_new_user(name, username, email, confirmation_code):
            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
        )
    )
-
-
    conn.commit()
    conn.close()
-
-
 
 
 def confirm_user_email(email, confirmation_code):
@@ -595,8 +565,6 @@ def booth():
        username=session["username"],
        error=None
    )
-
-
 
 
 @app.route("/booth_capture", methods=["POST"])
