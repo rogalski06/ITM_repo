@@ -32,19 +32,6 @@
        }
 
 
-       .enter-button {
-           background: white;
-           color: black;
-           border: 3px solid black;
-           padding: 10px 14px;
-           font-weight: bold;
-           cursor: pointer;
-           text-decoration: none;
-           display: inline-block;
-           margin: 8px;
-       }
-
-
        .booth-wrapper {
            position: relative;
            width: 650px;
@@ -316,7 +303,9 @@
 
        {% if session.get("username") %}
            <a href="/feed">Feed</a>
-           <a class="enter-button" href="/booth">Enter Booth →</a>
+           <a href="/booth">Enter Booth →</a>
+           <a href="/matches">Matches</a>
+           <a href="/dashboard">Dashboard</a>
            <a href="/logout">Logout</a>
        {% else %}
            <a href="/signup">Sign Up</a>

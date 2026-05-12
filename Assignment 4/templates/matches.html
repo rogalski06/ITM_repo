@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DigiBooth | Matches</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .matches-container {
+            width: 850px;
+            margin: 40px auto;
+            padding: 30px;
+            border: 6px solid black;
+            background: white;
+        }
+
+        .match-card {
+            border: 4px solid black;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+
+        .match-percent {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .shared-tags {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .empty-message {
+            font-size: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/feed">Feed</a>
+    <a href="/booth">Booth</a>
+    <a href="/profile">Profile</a>
+    <a href="/matches">Matches</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/logout">Logout</a>
+</nav>
+
+<div class="title-sign">MATCHES</div>
+
+<div class="matches-container">
+
+    <p>
+        DigiBooth compares your tags with other users to find shared interests and similar content styles.
+    </p>
+
+    {% if matches %}
+
+        {% for match in matches %}
+
+            <div class="match-card">
+
+                <h2>@{{ match.username }}</h2>
+
+                <div class="match-percent">
+                    {{ match.match_percent }}% Match
+                </div>
+
+                <div class="shared-tags">
+                    <strong>Shared Tags:</strong>
+                    {{ match.shared_tags | join(", ") }}
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-message">
+            No matches found yet. Try posting with more tags!
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

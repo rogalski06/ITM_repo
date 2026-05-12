@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DigiBooth | Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .dashboard-container {
+            width: 850px;
+            margin: 40px auto;
+            padding: 30px;
+            border: 6px solid black;
+            background: white;
+        }
+
+        .dashboard-card {
+            border: 4px solid black;
+            padding: 20px;
+            margin: 20px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/feed">Feed</a>
+    <a href="/booth">Booth</a>
+    <a href="/profile">Profile</a>
+    <a href="/matches">Matches</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/logout">Logout</a>
+</nav>
+
+<div class="title-sign">DASHBOARD</div>
+
+<div class="dashboard-container">
+
+    <p>
+        This dashboard summarizes DigiBooth activity using public posts and tag data.
+    </p>
+
+    <div class="dashboard-card">
+        <h2>Total Public Posts</h2>
+        <p>{{ total_posts }}</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Top Tags</h2>
+        {% if top_tags %}
+            {% for tag, count in top_tags %}
+                <p><strong>{{ tag }}</strong>: {{ count }}</p>
+            {% endfor %}
+        {% else %}
+            <p>No tag data yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Most Active Users</h2>
+        {% if active_users %}
+            {% for username, count in active_users %}
+                <p><strong>@{{ username }}</strong>: {{ count }} posts</p>
+            {% endfor %}
+        {% else %}
+            <p>No posts yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

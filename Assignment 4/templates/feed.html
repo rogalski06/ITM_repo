@@ -107,6 +107,199 @@
            background: white;
            color: black;
        }
+
+
+       .like-section {
+           margin-top: 10px;
+           text-align: center;
+       }
+
+
+       .like-button {
+           background: none;
+           border: none;
+           font-size: 24px;
+           cursor: pointer;
+           color: #ccc;
+           transition: color 0.2s;
+       }
+
+
+       .like-button:hover {
+           color: #ff4757;
+       }
+
+
+       .like-button.liked {
+           color: #ff4757;
+       }
+
+
+       .like-count {
+           margin-left: 5px;
+           font-size: 16px;
+           font-weight: bold;
+           color: #333;
+       }
+
+
+       .feed-toggle {
+           text-align: center;
+           margin: 20px 0;
+       }
+
+
+       .toggle-button {
+           display: inline-block;
+           margin: 0 10px;
+           padding: 10px 20px;
+           border: 3px solid black;
+           background: white;
+           color: black;
+           text-decoration: none;
+           font-weight: bold;
+           border-radius: 8px;
+       }
+
+
+       .toggle-button.active {
+           background: #e63946;
+           color: white;
+           border-color: #9a1c28;
+       }
+
+
+       .toggle-button:hover {
+           background: #e9e9e9;
+       }
+
+
+       .toggle-button.active:hover {
+           background: #d62839;
+       }
+
+
+       .users-section {
+           margin: 30px auto;
+           max-width: 1000px;
+           padding: 20px;
+       }
+
+
+       .users-section h2 {
+           text-align: center;
+           margin-bottom: 20px;
+           font-size: 24px;
+       }
+
+
+       .users-grid {
+           display: grid;
+           grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+           gap: 20px;
+           margin-top: 20px;
+       }
+
+
+       .user-card {
+           border: 3px solid black;
+           background: white;
+           padding: 20px;
+           text-align: center;
+           position: relative;
+       }
+
+
+       .user-link {
+           text-decoration: none;
+           color: inherit;
+           display: block;
+       }
+
+
+       .user-avatar {
+           margin-bottom: 15px;
+       }
+
+
+       .user-avatar img {
+           width: 80px;
+           height: 80px;
+           border-radius: 50%;
+           border: 3px solid black;
+           object-fit: cover;
+       }
+
+
+       .avatar-placeholder {
+           width: 80px;
+           height: 80px;
+           border-radius: 50%;
+           border: 3px solid black;
+           background: #f0f0f0;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-size: 32px;
+           color: #999;
+           margin: 0 auto;
+       }
+
+
+       .user-info h3 {
+           margin: 10px 0 5px 0;
+           font-size: 18px;
+       }
+
+
+       .username {
+           color: #666;
+           font-size: 14px;
+           margin: 5px 0;
+       }
+
+
+       .bio {
+           font-size: 14px;
+           color: #333;
+           margin: 10px 0;
+           display: -webkit-box;
+           -webkit-line-clamp: 2;
+           -webkit-box-orient: vertical;
+           overflow: hidden;
+       }
+
+
+       .user-stats {
+           font-size: 12px;
+           color: #666;
+           margin-top: 10px;
+       }
+
+
+       .user-stats span {
+           margin: 0 10px;
+       }
+
+
+       .user-card .follow-button {
+           position: absolute;
+           top: 10px;
+           right: 10px;
+           padding: 5px 10px;
+           font-size: 12px;
+       }
+
+
+       .username-link {
+           color: inherit;
+           text-decoration: none;
+       }
+
+
+       .username-link:hover {
+           text-decoration: underline;
+       }
    </style>
 </head>
 
@@ -122,6 +315,8 @@
        <a href="/feed">Feed</a>
        <a href="/booth">Booth</a>
        <a href="/profile">Profile</a>
+       <a href="/matches">Matches</a>
+       <a href="/dashboard">Dashboard</a>
        <a href="/logout">Logout</a>
    {% else %}
        <a href="/signup">Sign Up</a>
@@ -134,7 +329,7 @@
    <input
        type="text"
        name="q"
-       placeholder="Search users or tags..."
+       placeholder="Search users, posts, or tags..."
        value="{{ search_query }}"
    >
 
@@ -147,9 +342,58 @@
    {% endif %}
 </form>
 
+<div class="feed-toggle">
+   <a href="/feed?view=public{% if search_query %}&q={{ search_query }}{% endif %}" class="toggle-button {% if view == 'public' %}active{% endif %}">Public Feed</a>
+   <a href="/feed?view=following{% if search_query %}&q={{ search_query }}{% endif %}" class="toggle-button {% if view == 'following' %}active{% endif %}">Following</a>
+</div>
+
+{% if users %}
+<div class="users-section">
+   <h2>Users</h2>
+   <div class="users-grid">
+       {% for user in users %}
+           <div class="user-card">
+               <a href="/profile/{{ user.username }}" class="user-link">
+                   <div class="user-avatar">
+                       {% if user.profile_image %}
+                           <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="Profile Image">
+                       {% else %}
+                           <div class="avatar-placeholder">{{ user.name[0].upper() }}</div>
+                       {% endif %}
+                   </div>
+                   <div class="user-info">
+                       <h3>{{ user.name }}</h3>
+                       <p class="username">@{{ user.username }}</p>
+                       {% if user.bio %}
+                           <p class="bio">{{ user.bio }}</p>
+                       {% endif %}
+                       <div class="user-stats">
+                           <span>{{ user.follower_count }} followers</span>
+                           <span>{{ user.following_count }} following</span>
+                       </div>
+                   </div>
+               </a>
+               {% if user.username != session.username %}
+                   <button class="follow-button {% if user.is_following %}following{% endif %}"
+                           data-username="{{ user.username }}"
+                           onclick="toggleFollow('{{ user.username }}', event)">
+                       {% if user.is_following %}Unfollow{% else %}Follow{% endif %}
+                   </button>
+               {% endif %}
+           </div>
+       {% endfor %}
+   </div>
+</div>
+{% endif %}
 
 <div class="feed-wall">
-   <div class="wall-label">posted strips</div>
+   <div class="wall-label">
+       {% if view == 'following' %}
+           following strips
+       {% else %}
+           posted strips
+       {% endif %}
+   </div>
 
 
    {% if posts %}
@@ -169,7 +413,7 @@
                </div>
 
 
-               <p><strong>@{{ post.username }}</strong></p>
+               <p><strong><a href="/profile/{{ post.username }}" class="username-link">@{{ post.username }}</a></strong></p>
 
 
                {% if post.caption %}
@@ -185,6 +429,16 @@
                <p class="timestamp">{{ post.timestamp }}</p>
 
 
+               <div class="like-section">
+                   <button class="like-button {% if post.user_liked %}liked{% endif %}"
+                           data-post-id="{{ post.id }}"
+                           onclick="toggleLike({{ post.id }})">
+                       ♥
+                   </button>
+                   <span class="like-count">{{ post.like_count }}</span>
+               </div>
+
+
            </div>
        {% endfor %}
    {% else %}
@@ -197,6 +451,76 @@
    <a class="button-link create-button" href="/booth">Create a Photostrip →</a>
 {% endif %}
 
+<script>
+function toggleLike(postId) {
+   fetch(`/like/${postId}`, {
+       method: 'POST',
+       headers: {
+           'Content-Type': 'application/json',
+       }
+   })
+   .then(response => response.json())
+   .then(data => {
+       if (data.error) {
+           alert('Error: ' + data.error);
+           return;
+       }
+
+       // Update the button appearance
+       const button = document.querySelector(`[data-post-id="${postId}"]`);
+       const countSpan = button.nextElementSibling;
+
+       if (data.liked) {
+           button.classList.add('liked');
+       } else {
+           button.classList.remove('liked');
+       }
+
+       // Update the count
+       countSpan.textContent = data.like_count;
+   })
+   .catch(error => {
+       console.error('Error:', error);
+       alert('An error occurred while liking the post.');
+   });
+}
+
+function toggleFollow(username, event) {
+   if (event) {
+       event.preventDefault();
+       event.stopPropagation();
+   }
+
+   fetch(`/follow/${username}`, {
+       method: 'POST',
+       headers: {
+           'Content-Type': 'application/json',
+       }
+   })
+   .then(response => response.json())
+   .then(data => {
+       if (data.error) {
+           alert('Error: ' + data.error);
+           return;
+       }
+
+       // Update the button appearance and text
+       const button = document.querySelector(`[data-username="${username}"]`);
+
+       if (data.following) {
+           button.classList.add('following');
+           button.textContent = 'Unfollow';
+       } else {
+           button.classList.remove('following');
+           button.textContent = 'Follow';
+       }
+   })
+   .catch(error => {
+       console.error('Error:', error);
+       alert('An error occurred while following the user.');
+   });
+}
+</script>
 
 </body>
 </html>
