@@ -150,20 +150,7 @@
 <body>
 
 
-<nav>
-   <a href="/">Home</a>
-
-
-   {% if session.get("username") %}
-       <a href="/feed">Feed</a>
-       <a href="/booth">Booth</a>
-       <a href="/profile">Profile</a>
-       <a href="/logout">Logout</a>
-   {% else %}
-       <a href="/signup">Sign Up</a>
-       <a href="/signin">Sign In</a>
-   {% endif %}
-</nav>
+{% include "_navbar.html" %}
 
 
 <div class="title-sign">PREVIEW + POST</div>

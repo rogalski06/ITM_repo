@@ -298,20 +298,7 @@
    </div>
 
 
-   <nav>
-
-
-       {% if session.get("username") %}
-           <a href="/feed">Feed</a>
-           <a href="/booth">Enter Booth →</a>
-           <a href="/matches">Matches</a>
-           <a href="/dashboard">Dashboard</a>
-           <a href="/logout">Logout</a>
-       {% else %}
-           <a href="/signup">Sign Up</a>
-           <a href="/signin">Sign In</a>
-       {% endif %}
-   </nav>
+   {% include "_navbar.html" %}
 
 
    <div class="booth-wrapper">

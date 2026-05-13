@@ -564,65 +564,7 @@ def feed():
 def matches():
    if "username" not in session:
        return redirect("/signin")
-
-   current_user = session["username"]
-
-   conn = get_db_connection()
-   posts_rows = conn.execute(
-       "SELECT username, tags FROM posts WHERE privacy = 'public'"
-   ).fetchall()
-   conn.close()
-
-   posts = []
-   for row in posts_rows:
-       if row["tags"]:
-           posts.append({
-               "username": row["username"],
-               "tags": clean_tags(row["tags"]).split(",")
-           })
-
-   if not posts:
-       return render_template("matches.html", matches=[])
-
-   df = pd.DataFrame(posts)
-
-   user_tags = {}
-
-   for username in df["username"].unique():
-       tags_for_user = set()
-
-       user_posts = df[df["username"] == username]
-
-       for tag_list in user_posts["tags"]:
-           tags_for_user.update(tag_list)
-
-       user_tags[username] = tags_for_user
-
-   current_tags = user_tags.get(current_user, set())
-
-   match_results = []
-
-   for username, tags in user_tags.items():
-       if username == current_user:
-           continue
-
-       shared_tags = current_tags.intersection(tags)
-
-       if current_tags:
-           match_percent = round((len(shared_tags) / len(current_tags)) * 100)
-       else:
-           match_percent = 0
-
-       if shared_tags:
-           match_results.append({
-               "username": username,
-               "shared_tags": sorted(shared_tags),
-               "match_percent": match_percent
-           })
-
-   match_results.sort(key=lambda match: match["match_percent"], reverse=True)
-
-   return render_template("matches.html", matches=match_results)
+   return redirect("/dashboard")
 
 
 @app.route("/dashboard")
@@ -671,11 +613,14 @@ def dashboard():
        reverse=True
    )
 
+   matches = get_match_results(session["username"])
+
    return render_template(
        "dashboard.html",
        total_posts=total_posts,
        top_tags=top_tags,
-       active_users=active_users
+       active_users=active_users,
+       matches=matches
    )
 
 
@@ -949,6 +894,58 @@ def clean_tags(tags):
             cleaned_tags.append(cleaned_tag)
 
     return ",".join(cleaned_tags)
+
+
+def get_match_results(current_user):
+    conn = get_db_connection()
+    posts_rows = conn.execute(
+        "SELECT username, tags FROM posts WHERE privacy = 'public'"
+    ).fetchall()
+    conn.close()
+
+    posts = []
+    for row in posts_rows:
+        if row["tags"]:
+            posts.append({
+                "username": row["username"],
+                "tags": clean_tags(row["tags"]).split(",")
+            })
+
+    if not posts:
+        return []
+
+    df = pd.DataFrame(posts)
+    user_tags = {}
+
+    for username in df["username"].unique():
+        tags_for_user = set()
+        user_posts = df[df["username"] == username]
+        for tag_list in user_posts["tags"]:
+            tags_for_user.update(tag_list)
+        user_tags[username] = tags_for_user
+
+    current_tags = user_tags.get(current_user, set())
+    match_results = []
+
+    for username, tags in user_tags.items():
+        if username == current_user:
+            continue
+
+        shared_tags = current_tags.intersection(tags)
+        if current_tags:
+            match_percent = round((len(shared_tags) / len(current_tags)) * 100)
+        else:
+            match_percent = 0
+
+        if shared_tags:
+            match_results.append({
+                "username": username,
+                "shared_tags": sorted(shared_tags),
+                "match_percent": match_percent
+            })
+
+    match_results.sort(key=lambda match: match["match_percent"], reverse=True)
+    return match_results
 
 
 @app.route("/post_to_feed", methods=["POST"])

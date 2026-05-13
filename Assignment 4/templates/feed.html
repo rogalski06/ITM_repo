@@ -13,11 +13,9 @@
            padding: 35px;
            border: 6px solid black;
            background: white;
-           display: flex;
-           flex-wrap: wrap;
-           justify-content: center;
-           align-items: flex-start;
-           gap: 35px;
+           display: grid;
+           grid-template-columns: repeat(3, 1fr);
+           gap: 15px;
        }
 
 
@@ -27,11 +25,13 @@
            font-weight: bold;
            margin-bottom: 10px;
            text-align: center;
+           grid-column: 1 / -1;
        }
 
 
        .post-card {
-           width: 260px;
+           max-width: 240px;
+           margin: 0 auto;
            padding: 18px;
            border: 5px solid black;
            background: white;
@@ -40,7 +40,7 @@
 
 
        .posted-strip {
-           width: 170px;
+           width: 150px;
            margin: 10px auto 18px;
            border: 5px solid black;
            background: white;
@@ -307,22 +307,7 @@
 <body>
 
 
-<nav>
-   <a href="/">Home</a>
-
-
-   {% if session.get("username") %}
-       <a href="/feed">Feed</a>
-       <a href="/booth">Booth</a>
-       <a href="/profile">Profile</a>
-       <a href="/matches">Matches</a>
-       <a href="/dashboard">Dashboard</a>
-       <a href="/logout">Logout</a>
-   {% else %}
-       <a href="/signup">Sign Up</a>
-       <a href="/signin">Sign In</a>
-   {% endif %}
-</nav>
+{% include "_navbar.html" %}
 
 
 <form action="/feed" method="GET" class="search-box">
@@ -387,13 +372,13 @@
 {% endif %}
 
 <div class="feed-wall">
-   <div class="wall-label">
+   <h2 class="wall-label">
        {% if view == 'following' %}
            following strips
        {% else %}
            posted strips
        {% endif %}
-   </div>
+   </h2>
 
 
    {% if posts %}
